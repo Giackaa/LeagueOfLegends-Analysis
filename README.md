@@ -1,114 +1,109 @@
-League Data Project
+## League Data Project
 
 Welcome to the League Data Project repository! This project documents my journey and challenges as I explore and analyze data related to League of Legends, a game I am passionate about. From raw data exploration to advanced analytics, this repository will grow with insights, experiments, and solutions I discover along the way.
 
 -----
-About the Project
+## About the Project
 
-The League Data Project is centered on leveraging data to uncover patterns, improve gameplay strategies, and better understand the dynamics of League of Legends. The project will include a variety of topics such as:
+This project investigates the relationship between **support vision scores** and **jungler performance** in *League of Legends*.  
+The data was scraped from the **Riot Games API**, cleaned and transformed using **Excel**, **Power Query**, and **MySQL**, and analyzed visually with **Tableau**.
 
-Data Cleaning: Preparing raw data for analysis.
+The primary question:  
+> 💡 *Does a support’s vision control correlate with their jungler’s effectiveness — specifically pick kills and gold advantage?*
 
-Visualization: Creating intuitive graphs and dashboards to represent trends.
+## 🧑‍💻 Tech Stack
+| Tool | Purpose |
+|------|----------|
+| 🐍 **Python** | Data scraping from Riot API |
+| 📊 **Excel / Power Query** | Data cleaning, joining, and transformation |
+| 🗄️ **MySQL** | Database management for large datasets |
+| 📈 **Tableau** | Visual analysis and percentiles-based performance comparison |
 
-Statistics: Applying statistical methods to derive meaningful conclusions.
-
-Game Mechanics Insights: Analyzing in-game metrics to enhance performance.
 
 -----
-
-Python
+##Python
 
 Initially used the individualPosition column to determine roles but discovered inaccuracies (e.g., players with utility roles who weren't supports).
 
 Switched to teamPosition data after scraping accurate data from the League API.
 
-Consulted ChatGPT to draft a standard code for API scraping and modified it to meet specific needs.
+---
+## Data Trimming and Cleaning
+
+### 🧽 Cleaning & Transformation
+- Removed one-sided matches (<14 min).
+- Grouped by `gameId` to summarize each game.
+- Used Power Query to:
+  - Join Champion ID ↔ Champion Name datasets.
+  - Unpivot → join → pivot champion tables.
+  - Union all champion tables from a folder into a single dataset.
+
 
 -----
+## Excel Analysis
 
-Filtered out:
+### 🧩 Data Organization
+- Sorted players into **teams** and **roles**.
+- Verified data using **game length** and **win/loss**.
+- Filtered out:
+  - Non-jungler / non-support roles.
+  - Games under **1200 seconds (20 min)** — excluded early surrenders, AFKs, or smurfs.
 
-Non-relevant roles (Jungle and Utility retained).
+### ⚖️ Gold Comparison
+- Grouped players by `gameId`.
+- Calculated **min** and **max** gold values for each match.
+- Excluded matches with **gold differences > 100 gold/min** (imbalanced games).
 
-Games shorter than 20 minutes (less than 1200 seconds).
+### 👁️ Vision vs. Pick Kills
+- Divided **vision scores** into 5 percentiles (0–20, 20–40, 40–60, 60–80, 80–100).
+- Compared jungler **pick kills** under:
+  - High-vision supports (80–100%)
+  - Low-vision supports (0–20%)
+- Scatter charts were too messy → replaced with **percentile-based aggregation**.
+- Compartmentalized **pick kills** into percentiles to reveal clearer correlations.
 
-Analyzed gold differences between junglers and supports, grouping players by gameID.
-
-Excluded games with significant gold discrepancies (> 100 gold per minute).
-
------
-
-Excel
-
-Sorted players into teams and used formulas to auto increment across rows.
-
-Verified data validity by checking game lengths and win/loss outcomes.
-
-Compartmentalized vision scores and pick kills into percentiles for better readability.
-
-Used scatter charts and trend lines to illustrate relationships between vision scores and jungler pick kills.
-
-Joined jungler and support data tables for pivot analysis using PowerQuery.
-
-Used PowerQuery to condense data into useful tables.
-
-Grouped data by gameID to provide a general overview of each game.
-
-Transformed champion IDs into names using PowerQuery by unpivoting, joining, and pivoting columns.
-
-Unified multiple champion tables into one culmination table.
-
-Organized games into categories based on time intervals (e.g., 15-20, 20-25 minutes).
-
-Identified champions that carried games based on damage output relative to game time.
-
-Evaluated champions' performance compared to the average performance in their respective time slots.
+### 🔍 Advanced Formulas
+Used **Power Query** and **complex Excel logic** to:
+- Merge jungler + support data into single rows (`gameId` + team side).
+- Use `OFFSET`, nested `IF`, and dynamic `INDEX` functions to pull data directly from pivot tables.
+- Avoid static value tables that break when refreshing pivots.
 
 -----
-Tableau
+## Tableau Visualization 
+### Approach
+1. **Percentile-Based Evaluation**
+   - Used **percentiles** to evaluate jungler performance in games with **low vs. high support ward placements** within specific time slots.
+   - Since each time slot has different distributions, percentiles were calculated separately per slot.
 
-Investigated correlations between gold earned and wards placed but noted both metrics increase with game length.
+2. **LOD (Level of Detail) Expressions**
+   - Utilized **LOD expressions** to calculate fixed **75th** and **25th percentiles** for each time slot.
+   - This ensured consistent comparison across varying game lengths.
 
-Used percentiles to evaluate jungler performance in games with low vs. high support ward placements within specific time slots.
+3. **Categorization**
+   - Created **calculated fields** using `IF` statements to categorize performance:
+     - `"Above 75th"`
+     - `"Below 25th"`
+     - `"Other"`
 
-Utilized LOD expressions to calculate fixed 75th/25th percentiles for each time slot.
+4. **Data Filtering**
+   - Excluded games with durations **beyond 3000 seconds** due to significantly lower sample sizes.
+   - This step helps **avoid statistical illusions** and maintain data integrity.
 
-Used calculated fields with IF statements to categorize data into "Above 75th", "Below 25th", or "Other" categories.
-
-Excluded games with durations beyond 3000 seconds due to significantly lower sample sizes, limiting statistical illusions.
-
------
-Problems and Solutions
-
-Data Grouping: Debated between PowerQuery and MySQL; opted for PowerQuery due to quicker imports.
-
-Formula Refresh: Reviewed COUNTIF and other formulas to regain proficiency.
-
-Correlation Challenges: Gold earned and wards placed increased with game length; used percentiles within time slots to normalize data.
-
-Low Sample Sizes: Excluded game times beyond 3000 seconds to avoid statistical illusions.
-
------
-To-Do List
-
-Continue refining data analysis methods.
-
-Explore deeper insights into jungler-support dynamics.
-
-Optimize workflows between PowerQuery and MySQL.
-
-Develop additional visualizations to enhance interpretability.
+**Sample**
 
 -----
-Findings and Recommendations
+## Key Insights
+- Those who place more wards than 75% of other players increase their jungler’s gold earning by an average of 618 gold vs. 162 gold for those who has killed more wards
+- Vision control beyond 20 minutes becomes a game-wide advantage, not just lane-specific.  
+- Killing more wards increases an extra 0.42 to the jungler's gank kills, while placing more wards is an extra 0.93, more than 2x more efficient than killing more wards.
+- In fostering a better performative environment for the jungler, I would recommend a support to focus on placing more wards around the map rather than seeking to kill more wards.
+---
 
-Those who place more wards than 75% of other players increase their jungler’s gold earning by an average of 618 gold vs. 162 gold for those who has killed more wards
-
-Killing more wards increases an extra 0.42 to the jungler's gank kills, while placing more wards is an extra 0.93, more than 2x more efficient than killing more wards.
-
-In fostering a better performative environment for the jungler, I would recommend a support to focus on placing more wards around the map rather than seeking to kill more wards.
-
+## Future Enhancements
+- 🔁 Automate data scraping via **scheduled Python tasks** (`cron`, `apscheduler`, or `schedule`).  
+- 🧮 Expand the dataset with **rank-tier breakdowns** (Platinum → Challenger).  
+- 🤖 Apply **machine-learning models** (e.g., regression) to predict jungle performance from vision metrics.  
+- 💾 Create a **Streamlit dashboard** for real-time visualization and interactive filtering.
 -----
 Feedback and Collaboration
 
