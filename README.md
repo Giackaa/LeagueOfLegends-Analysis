@@ -18,15 +18,6 @@ The primary question:
 | 📊 **Excel / Power Query** | Data cleaning, joining, and transformation |
 | 🗄️ **MySQL** | Database management for large datasets |
 | 📈 **Tableau** | Visual analysis and percentiles-based performance comparison |
-
-
------
-##Python
-
-Initially used the individualPosition column to determine roles but discovered inaccuracies (e.g., players with utility roles who weren't supports).
-
-Switched to teamPosition data after scraping accurate data from the League API.
-
 ---
 ## Data Trimming and Cleaning
 
@@ -88,9 +79,6 @@ Used **Power Query** and **complex Excel logic** to:
 4. **Data Filtering**
    - Excluded games with durations **beyond 3000 seconds** due to significantly lower sample sizes.
    - This step helps **avoid statistical illusions** and maintain data integrity.
-
-**Sample**
-
 -----
 ## Key Insights
 - Those who place more wards than 75% of other players increase their jungler’s gold earning by an average of 618 gold vs. 162 gold for those who has killed more wards
@@ -108,7 +96,3 @@ Used **Power Query** and **complex Excel logic** to:
 Feedback and Collaboration
 
 I am open to suggestions and feedback as I refine my methods and learn more about data analysis and League of Legends. If you want to collaborate or discuss ideas, feel free to reach out!
-
-Disclaimer
-
-This repository is a work in progress. It will grow over time as I upload more information and tackle new challenges. Stay tuned for updates!
