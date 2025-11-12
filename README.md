@@ -11,17 +11,17 @@ The data was scraped from the **Riot Games API**, cleaned and transformed using 
 The primary question:  
 > 💡 *Does a support’s vision control correlate with their jungler’s effectiveness — specifically pick kills and gold advantage?*
 
-## 🧑‍💻 Tech Stack
+## Tech Stack
 | Tool | Purpose |
 |------|----------|
-| 🐍 **Python** | Data scraping from Riot API |
-| 📊 **Excel / Power Query** | Data cleaning, joining, and transformation |
-| 🗄️ **MySQL** | Database management for large datasets |
-| 📈 **Tableau** | Visual analysis and percentiles-based performance comparison |
+|  **Python** | Data scraping from Riot API |
+|  **Excel / Power Query** | Data cleaning, joining, and transformation |
+|  **MySQL** | Database management for large datasets |
+|  **Tableau** | Visual analysis and percentiles-based performance comparison |
 ---
 ## Data Trimming and Cleaning
 
-### 🧽 Cleaning & Transformation
+###  Cleaning & Transformation
 - Removed one-sided matches (<14 min).
 - Grouped by `gameId` to summarize each game.
 - Used Power Query to:
@@ -33,19 +33,19 @@ The primary question:
 -----
 ## Excel Analysis
 
-### 🧩 Data Organization
+###  Data Organization
 - Sorted players into **teams** and **roles**.
 - Verified data using **game length** and **win/loss**.
 - Filtered out:
   - Non-jungler / non-support roles.
   - Games under **1200 seconds (20 min)** — excluded early surrenders, AFKs, or smurfs.
 
-### ⚖️ Gold Comparison
+###  Gold Comparison
 - Grouped players by `gameId`.
 - Calculated **min** and **max** gold values for each match.
 - Excluded matches with **gold differences > 100 gold/min** (imbalanced games).
 
-### 👁️ Vision vs. Pick Kills
+###  Vision vs. Pick Kills
 - Divided **vision scores** into 5 percentiles (0–20, 20–40, 40–60, 60–80, 80–100).
 - Compared jungler **pick kills** under:
   - High-vision supports (80–100%)
@@ -53,7 +53,7 @@ The primary question:
 - Scatter charts were too messy → replaced with **percentile-based aggregation**.
 - Compartmentalized **pick kills** into percentiles to reveal clearer correlations.
 
-### 🔍 Advanced Formulas
+###  Advanced Formulas
 Used **Power Query** and **complex Excel logic** to:
 - Merge jungler + support data into single rows (`gameId` + team side).
 - Use `OFFSET`, nested `IF`, and dynamic `INDEX` functions to pull data directly from pivot tables.
@@ -88,10 +88,10 @@ Used **Power Query** and **complex Excel logic** to:
 ---
 
 ## Future Enhancements
-- 🔁 Automate data scraping via **scheduled Python tasks** (`cron`, `apscheduler`, or `schedule`).  
-- 🧮 Expand the dataset with **rank-tier breakdowns** (Platinum → Challenger).  
-- 🤖 Apply **machine-learning models** (e.g., regression) to predict jungle performance from vision metrics.  
-- 💾 Create a **Streamlit dashboard** for real-time visualization and interactive filtering.
+-  Automate data scraping via **scheduled Python tasks** (`cron`, `apscheduler`, or `schedule`).  
+-  Expand the dataset with **rank-tier breakdowns** (Platinum → Challenger).  
+-  Apply **machine-learning models** (e.g., regression) to predict jungle performance from vision metrics.  
+-  Create a **Streamlit dashboard** for real-time visualization and interactive filtering.
 -----
 Feedback and Collaboration
 
